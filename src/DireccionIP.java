@@ -1,11 +1,17 @@
 public class DireccionIP {
     private int[] octetos = new int[4];
     private char clase;
-    private boolean IdRed;
+    private DireccionIP mascaraRed;
+    private DireccionIP idRed;
+
+    private static final DireccionIP MASCARAC = new DireccionIP("255.255.255.0");
+    private static final DireccionIP MASCARAB = new DireccionIP("255.255.0.0");
+    private static final DireccionIP MASCARAA = new DireccionIP("255.0.0.0");
 
     DireccionIP(String direccion) {
         this.octetos=obtenerOctetos(direccion);
-        this.clase=obtenerClase(this);
+        this.clase = obtenerClase(this);
+        this.determinarMascaraRed();
     }
 
     DireccionIP(int primeroct, int segundoct, int terceroct, int cuartoct) {
@@ -13,17 +19,31 @@ public class DireccionIP {
         this.octetos[1] = segundoct;
         this.octetos[2] = terceroct;
         this.octetos[3] = cuartoct;
+        this.clase = obtenerClase(this);
+        this.determinarMascaraRed();
     }
 
     DireccionIP(int[] direccion) {
         this.octetos = direccion;
+        this.clase = obtenerClase(this);
+        this.determinarMascaraRed();
     }
 
-    public char getClase() {
-        return clase;
+    public void determinarMascaraRed(){
+        if(this == MASCARAA || this==MASCARAB || this == MASCARAC){
+            return;
+        } else {
+            if (this.clase == 'C') {
+                this.mascaraRed = MASCARAC;
+            } else if (this.clase == 'B') {
+                this.mascaraRed = MASCARAB;
+            } else if (this.clase == 'A') {
+                this.mascaraRed = MASCARAA;
+            }
+        }
     }
 
-    private char obtenerClase(DireccionIP direccionIP) {
+    public static char obtenerClase(DireccionIP direccionIP) {
         char tipoClase='C';
         if(direccionIP.octetos[0]<128){
             tipoClase='A';
@@ -32,7 +52,6 @@ public class DireccionIP {
         }else if (direccionIP.octetos[0]>=192 && direccionIP.octetos[0]<224){
             tipoClase='C';
         }
-
         return tipoClase;
     }
 
@@ -51,6 +70,27 @@ public class DireccionIP {
         String ultimoOcteto = direccion.substring(ultimoPunto, direccion.length());
         octetos[3]=Integer.parseInt(ultimoOcteto);
         return octetos;
+    }
+
+    public char getClase() {
+        return clase;
+    }
+
+    public DireccionIP getMascaraRed() {
+        return mascaraRed;
+    }
+
+    public DireccionIP getIdRed() {
+        return idRed;
+    }
+
+    public String infoIP(){
+        String salida="";
+
+        salida+="Dirección:  "+this.toString()+"\n"+
+                "Clase:      "+this.getClase()+"\n"+
+                "Mascara Red:"+this.getMascaraRed();
+        return salida;
     }
 
     @Override

@@ -1,10 +1,10 @@
 public class Subnetcod {
     public static void main(String[] args) {
 
-        DireccionIP casa = new DireccionIP("10.8.25.75");
+        int[] trabajo = {170,0,1,5};
 
-        System.out.println(casa.toString());
-        System.out.println(casa.getClase());
+        DireccionIP casa = new DireccionIP(trabajo);
 
+        System.out.println(casa.infoIP());
     }
 }
