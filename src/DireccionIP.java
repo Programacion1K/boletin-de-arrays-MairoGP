@@ -4,14 +4,15 @@ public class DireccionIP {
     private DireccionIP mascaraRed;
     private DireccionIP idRed;
 
-    private static final DireccionIP MASCARAC = new DireccionIP("255.255.255.0");
-    private static final DireccionIP MASCARAB = new DireccionIP("255.255.0.0");
-    private static final DireccionIP MASCARAA = new DireccionIP("255.0.0.0");
+    private static final DireccionIP MASCARAC = new DireccionIP("255.255.255.0",true);
+    private static final DireccionIP MASCARAB = new DireccionIP("255.255.0.0",true);
+    private static final DireccionIP MASCARAA = new DireccionIP("255.0.0.0",true);
 
     DireccionIP(String direccion) {
         this.octetos=obtenerOctetos(direccion);
         this.clase = obtenerClase(this);
         this.determinarMascaraRed();
+        this.determinarIdRed();
     }
 
     DireccionIP(int primeroct, int segundoct, int terceroct, int cuartoct) {
@@ -21,18 +22,32 @@ public class DireccionIP {
         this.octetos[3] = cuartoct;
         this.clase = obtenerClase(this);
         this.determinarMascaraRed();
+        this.determinarIdRed();
     }
 
     DireccionIP(int[] direccion) {
         this.octetos = direccion;
         this.clase = obtenerClase(this);
         this.determinarMascaraRed();
+        this.determinarIdRed();
+    }
+
+    DireccionIP(String direccion, boolean casoEspecial){
+        this.octetos=obtenerOctetos(direccion);
+    }
+
+    public void determinarIdRed(){
+        this.idRed = new DireccionIP("0.0.0.0",true);
+            for (int i = 0; i < 4; i++) {
+                if (this.mascaraRed.octetos[i] != 0) {
+                    this.idRed.octetos[i] = this.octetos[i];
+                } else {
+                    this.idRed.octetos[i] = 0;
+                }
+            }
     }
 
     public void determinarMascaraRed(){
-        if(this == MASCARAA || this==MASCARAB || this == MASCARAC){
-            return;
-        } else {
             if (this.clase == 'C') {
                 this.mascaraRed = MASCARAC;
             } else if (this.clase == 'B') {
@@ -40,7 +55,6 @@ public class DireccionIP {
             } else if (this.clase == 'A') {
                 this.mascaraRed = MASCARAA;
             }
-        }
     }
 
     public static char obtenerClase(DireccionIP direccionIP) {
@@ -89,7 +103,8 @@ public class DireccionIP {
 
         salida+="Dirección:  "+this.toString()+"\n"+
                 "Clase:      "+this.getClase()+"\n"+
-                "Mascara Red:"+this.getMascaraRed();
+                "Mascara Red:"+this.getMascaraRed()+"\n"+
+                "Id de Red:  "+this.getIdRed();
         return salida;
     }
 
