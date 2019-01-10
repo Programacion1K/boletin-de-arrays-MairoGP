@@ -3,6 +3,7 @@ public class DireccionIP {
     private char clase;
     private DireccionIP mascaraRed;
     private DireccionIP idRed;
+    public static int totalDirecciones=0;
 
     private static final DireccionIP MASCARAC = new DireccionIP("255.255.255.0",true);
     private static final DireccionIP MASCARAB = new DireccionIP("255.255.0.0",true);
@@ -13,6 +14,8 @@ public class DireccionIP {
         this.clase = obtenerClase(this);
         this.determinarMascaraRed();
         this.determinarIdRed();
+        this.añadirBiblioteca();
+        totalDirecciones++;
     }
 
     DireccionIP(int primeroct, int segundoct, int terceroct, int cuartoct) {
@@ -23,6 +26,8 @@ public class DireccionIP {
         this.clase = obtenerClase(this);
         this.determinarMascaraRed();
         this.determinarIdRed();
+        this.añadirBiblioteca();
+        totalDirecciones++;
     }
 
     DireccionIP(int[] direccion) {
@@ -30,10 +35,26 @@ public class DireccionIP {
         this.clase = obtenerClase(this);
         this.determinarMascaraRed();
         this.determinarIdRed();
+        this.añadirBiblioteca();
+        totalDirecciones++;
     }
 
     DireccionIP(String direccion, boolean casoEspecial){
         this.octetos=obtenerOctetos(direccion);
+    }
+
+    DireccionIP(int[] direccion, boolean casoEspecial) {
+        this.octetos = direccion;
+    }
+    DireccionIP(DireccionIP direccion){
+        this.octetos=direccion.octetos;
+        this.clase=direccion.clase;
+        this.mascaraRed=direccion.mascaraRed;
+        this.idRed=direccion.idRed;
+    }
+
+    public void añadirBiblioteca(){
+        Subnetcod.Biblioteca[totalDirecciones]=this;
     }
 
     public void determinarIdRed(){
@@ -85,6 +106,23 @@ public class DireccionIP {
         octetos[3]=Integer.parseInt(ultimoOcteto);
         return octetos;
     }
+/*
+    public static DireccionIP obtenerMismaRed (DireccionIP direccion1, DireccionIP direccion2){
+
+    }
+*/
+    public void setMascaraRed(String mascaraRed) {
+        int[] mascara = obtenerOctetos(mascaraRed);
+        DireccionIP mascDir = new DireccionIP(mascara,true);
+        this.mascaraRed = mascDir;
+    }
+
+    public static void copiarDirecciones(DireccionIP direccionBlanco, DireccionIP direccionACopiar){
+        direccionBlanco.setOctetos(direccionACopiar.octetos);
+        direccionBlanco.setClase(direccionACopiar.clase);
+        direccionBlanco.setMascaraRed(direccionACopiar.mascaraRed);
+        direccionBlanco.setIdRed(direccionACopiar.idRed);
+    }
 
     public char getClase() {
         return clase;
@@ -98,6 +136,21 @@ public class DireccionIP {
         return idRed;
     }
 
+    private void setOctetos(int[] octetos){
+        this.octetos=octetos;
+    }
+
+    private void setClase(char clase){
+        this.clase=clase;
+    }
+    private void setMascaraRed(DireccionIP mascaraRed){
+        this.mascaraRed=mascaraRed;
+    }
+    private void setIdRed(DireccionIP idRed){
+        this.idRed=idRed;
+    }
+
+
     public String infoIP(){
         String salida="";
 
@@ -110,6 +163,6 @@ public class DireccionIP {
 
     @Override
     public String toString() {
-        return "("+this.octetos[0]+"."+this.octetos[1]+"."+this.octetos[2]+"."+this.octetos[3]+")";
+        return this.octetos[0]+"."+this.octetos[1]+"."+this.octetos[2]+"."+this.octetos[3];
     }
 }
