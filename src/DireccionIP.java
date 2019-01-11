@@ -79,7 +79,7 @@ public class DireccionIP {
     }
 
     public static char obtenerClase(DireccionIP direccionIP) {
-        char tipoClase='C';
+        char tipoClase='M';
         if(direccionIP.octetos[0]<128){
             tipoClase='A';
         } else if (direccionIP.octetos[0]>=128 && direccionIP.octetos[0]<192){
@@ -117,11 +117,21 @@ public class DireccionIP {
         this.mascaraRed = mascDir;
     }
 
-    public static void copiarDirecciones(DireccionIP direccionBlanco, DireccionIP direccionACopiar){
-        direccionBlanco.setOctetos(direccionACopiar.octetos);
-        direccionBlanco.setClase(direccionACopiar.clase);
-        direccionBlanco.setMascaraRed(direccionACopiar.mascaraRed);
-        direccionBlanco.setIdRed(direccionACopiar.idRed);
+
+
+    public String esPublica(){
+        String salida="";
+        if(this.octetos[0] == 10){
+            return "es Privada";
+        } else if(this.octetos[0] == 170){
+            if(this.octetos[1] >= 16 && this.octetos[1] < 32){
+                return "es Privada";
+            }
+        } else if(this.octetos[0] == 192 && this.octetos[1] == 168){
+            return "es Privada";
+        }
+
+        return "es Pública";
     }
 
     public char getClase() {
@@ -157,7 +167,8 @@ public class DireccionIP {
         salida+="Dirección:  "+this.toString()+"\n"+
                 "Clase:      "+this.getClase()+"\n"+
                 "Mascara Red:"+this.getMascaraRed()+"\n"+
-                "Id de Red:  "+this.getIdRed();
+                "Id de Red:  "+this.getIdRed()+"\n"+
+                "Red de tipo:"+this.esPublica()+"\n";
         return salida;
     }
 

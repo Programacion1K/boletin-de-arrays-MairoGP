@@ -3,6 +3,7 @@ import javax.swing.*;
 public class Subnetcod {
 
     public static  DireccionIP[] Biblioteca = new DireccionIP[20];
+
     public static void main(String[] args) {
         menu();
     }
@@ -10,7 +11,7 @@ public class Subnetcod {
     public static void nuevaDireccionIP(){
         String direccion = JOptionPane.showInputDialog("Introduce la direccion IP separada por puntos");
         DireccionIP nuevadireccion = new DireccionIP(direccion);
-        JOptionPane.showMessageDialog(null,direccion.toString());
+        JOptionPane.showMessageDialog(null,nuevadireccion.infoIP());
         Biblioteca[DireccionIP.totalDirecciones]=nuevadireccion;
     }
     
@@ -56,14 +57,39 @@ public class Subnetcod {
         return null;
     }
 
-    public static DireccionIP clonarDireccion(DireccionIP direccionACopiar){
-        DireccionIP direccionClonada = new DireccionIP(direccionACopiar);
-        return direccionClonada;
-    }
-
     private static void mostrarInfoIP() {
         String direccion = JOptionPane.showInputDialog(mostrarDirecciones()+"Seleciona la direccion");
         JOptionPane.showMessageDialog(null, buscarDireccionIP(direccion).infoIP());
+    }
+
+
+    public static void conjuntoMismaRed (DireccionIP[] biblioteca){
+
+    }
+
+    private static void pertenecenMismaRed() {
+        String seleccionar = JOptionPane.showInputDialog(mostrarDirecciones()+"Introduce la primera dirección a comprobar");
+        DireccionIP direccionEncotrada1 = buscarDireccionIP(seleccionar);
+        seleccionar = JOptionPane.showInputDialog(mostrarDirecciones()+"Introduce la segunda direccion a comprobar");
+        DireccionIP direccionEncontrada2 = buscarDireccionIP(seleccionar);
+
+        String comprobación = JOptionPane.showInputDialog(mostrarDirecciones()+"\n("+direccionEncotrada1.toString()+
+                                                                                ") ("+direccionEncontrada2.toString()+
+                                                                                ") \nSon correctas las direcciones seleccionadas?");
+        if(comprobación.charAt(0)=='y'){
+            String salida="";
+
+            salida+=direccionEncotrada1.infoIP() +"---------------------\n"+direccionEncontrada2.infoIP();
+
+            if(direccionEncotrada1.getIdRed().toString().equals(direccionEncontrada2.getIdRed().toString())){
+                salida+="\nLas dos direcciones pertenecen a la misma Red";
+            } else {
+                salida+="\nLas dos direcciones pertenecen a distinta Red";
+            }
+            JOptionPane.showMessageDialog(null,salida);
+        } else {
+            return;
+        }
     }
 
     private static void menu() {
@@ -77,6 +103,7 @@ public class Subnetcod {
                 "2. Mostrar la informacion de una direccion\n"+
                 "3. Mostrar direcciones guardadas.\n"+
                 "4. Establecer mascara de Red\n"+
+                "5. Averiguar si pertenecen a la misma red\n"+
                 "6. Salir\n";
 
         int opcion=0;
@@ -94,7 +121,39 @@ public class Subnetcod {
 
                 case 4: establecerMascara();
                 break;
+
+                case 5: mismaRed();
+                break;
             }
         }
     }
+
+    private static void mismaRed() {
+        String respuesta = JOptionPane.showInputDialog("Desea comprobar mas de 2 direcciones?");
+        if(respuesta.charAt(0) == 'y'){
+            String otraBiblioteca = JOptionPane.showInputDialog("Desea crear una biblioteca con nuevas direcciones?");
+            if(otraBiblioteca.charAt(0) == 'y'){
+                crearBiblioteca();
+            }
+            conjuntoMismaRed(Biblioteca);
+        } else {
+            pertenecenMismaRed();
+        }
+    }
+
+    private static void crearBiblioteca() {
+        DireccionIP[] bibliotecaEjemplo = new DireccionIP[50];
+        int[] octetos = new int[100];
+
+        for(int i=0;i<bibliotecaEjemplo.length;i++){
+            octetos[i] = octetos[i+1]-octetos[i+4];
+            bibliotecaEjemplo[i] = new DireccionIP(octetos[i],octetos[i+1],octetos[i+2],octetos[i+3]);
+        }
+
+        for (int i = 0; i < bibliotecaEjemplo.length; i++) {
+            System.out.println(bibliotecaEjemplo[i].infoIP());
+        }
+
+    }
+
 }
