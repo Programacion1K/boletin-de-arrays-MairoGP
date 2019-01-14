@@ -64,7 +64,14 @@ public class Subnetcod {
 
 
     public static void conjuntoMismaRed (DireccionIP[] biblioteca){
-
+        boolean mismaRed = false;
+        for (int i = 0; i < DireccionIP.totalDirecciones; i++) {
+            if (biblioteca[i].getIdRed().toString().equals(biblioteca[i+1].getIdRed().toString())){
+                mismaRed = true;
+            } else{
+                mismaRed = false;
+            }
+        }
     }
 
     private static void pertenecenMismaRed() {
@@ -162,19 +169,19 @@ public class Subnetcod {
 
     }
 
-    private static void crearBiblioteca() {
-        DireccionIP[] bibliotecaEjemplo = new DireccionIP[50];
-        int[] octetos = new int[100];
-
-        for(int i=0;i<bibliotecaEjemplo.length;i++){
-            octetos[i] = octetos[i+1]-octetos[i+4];
-            bibliotecaEjemplo[i] = new DireccionIP(octetos[i],octetos[i+1],octetos[i+2],octetos[i+3]);
-        }
-
-        for (int i = 0; i < bibliotecaEjemplo.length; i++) {
-            System.out.println(bibliotecaEjemplo[i].infoIP());
-        }
-
-    }
+//    private static void crearBiblioteca() {
+//        DireccionIP[] bibliotecaEjemplo = new DireccionIP[50];
+//        int[] octetos = new int[100];
+//
+//        for(int i=0;i<bibliotecaEjemplo.length;i++){
+//            octetos[i] = octetos[i+1]-octetos[i+4];
+//            bibliotecaEjemplo[i] = new DireccionIP(octetos[i],octetos[i+1],octetos[i+2],octetos[i+3]);
+//        }
+//
+//        for (int i = 0; i < bibliotecaEjemplo.length; i++) {
+//            System.out.println(bibliotecaEjemplo[i].infoIP());
+//        }
+//
+//    }
 
 }
