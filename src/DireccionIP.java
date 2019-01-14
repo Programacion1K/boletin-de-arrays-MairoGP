@@ -47,7 +47,7 @@ public class DireccionIP {
         this.octetos = direccion;
     }
     DireccionIP(DireccionIP direccion){
-        this.octetos=direccion.octetos;
+        this.setOctetos(direccion.octetos);
         this.clase=direccion.clase;
         this.mascaraRed=direccion.mascaraRed;
         this.idRed=direccion.idRed;

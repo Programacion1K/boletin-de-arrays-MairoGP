@@ -103,11 +103,12 @@ public class Subnetcod {
                 "2. Mostrar la informacion de una direccion\n"+
                 "3. Mostrar direcciones guardadas.\n"+
                 "4. Establecer mascara de Red\n"+
-                "5. Averiguar si pertenecen a la misma red\n"+
-                "6. Salir\n";
+                "5. Dos IP's pertenecen a la misma red\n"+
+                "6. Conjunto de IP's pertenecen a la misma red\n"+
+                "9. Salir\n";
 
         int opcion=0;
-        while(opcion!=6){
+        while(opcion!=9){
             opcion = Integer.parseInt(JOptionPane.showInputDialog(menu+"Introduce el número de la instrucción:"));
             switch (opcion){
                 case 1: nuevaDireccionIP();
@@ -122,23 +123,43 @@ public class Subnetcod {
                 case 4: establecerMascara();
                 break;
 
-                case 5: mismaRed();
+                case 5: pertenecenMismaRed();
                 break;
+
+                case 6: mismaRed();
             }
         }
     }
 
+
     private static void mismaRed() {
-        String respuesta = JOptionPane.showInputDialog("Desea comprobar mas de 2 direcciones?");
-        if(respuesta.charAt(0) == 'y'){
-            String otraBiblioteca = JOptionPane.showInputDialog("Desea crear una biblioteca con nuevas direcciones?");
-            if(otraBiblioteca.charAt(0) == 'y'){
-                crearBiblioteca();
+
+        DireccionIP[] arrayExterno = new DireccionIP[50];
+        int contador=0;
+        String respuesta = JOptionPane.showInputDialog("Introduzca las direcciones separadas por puntos. \nIntroduzca \'n\' para salir");
+        while(respuesta.charAt(0)!='n'){
+            arrayExterno[contador] = new DireccionIP(respuesta);
+            contador++;
+            respuesta = JOptionPane.showInputDialog("Introduzca las direcciones separadas por puntos. \nIntroduzca \'n\' para salir");
+        }
+        String direccionesAñadidas = "Direcciones añadidas\n";
+        for (int i = 0; i < contador; i++) {
+            direccionesAñadidas+=arrayExterno[i].toString()+"\n";
+        }
+        JOptionPane.showMessageDialog(null,direccionesAñadidas);
+        System.out.println(contador);
+        String añadirExistentes = JOptionPane.showInputDialog("Desea añadir las direcciones ya guardadas?");
+        if(añadirExistentes.charAt(0) == 'y'){
+            for (int i = 1; i <= DireccionIP.totalDirecciones; i++) {
+                arrayExterno[contador] = new DireccionIP(Biblioteca[i-1]);
+                contador++;
             }
             conjuntoMismaRed(Biblioteca);
+
         } else {
-            pertenecenMismaRed();
+            conjuntoMismaRed(arrayExterno);
         }
+
     }
 
     private static void crearBiblioteca() {
